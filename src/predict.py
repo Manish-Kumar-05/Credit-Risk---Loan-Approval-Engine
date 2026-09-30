@@ -197,8 +197,7 @@ def validate_applicant(applicant_data):
 
 def predict_loan(applicant_data):
     """
-    Predict whether a loan application should be
-    approved or rejected.
+    Predict whether a loan application should be approved or rejected.
 
     Parameters
     ----------
@@ -239,7 +238,7 @@ def predict_loan(applicant_data):
     # ----------------------------------------------
 
     approval_probability = (
-        model.predict_proba(applicant_df)[0, 1]
+        model.predict_proba(applicant_df)[0, 1]  #prob of class 1
     )
 
     # ----------------------------------------------

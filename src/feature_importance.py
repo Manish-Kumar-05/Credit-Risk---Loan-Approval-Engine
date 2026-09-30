@@ -1,15 +1,18 @@
+print("feature_importance.py started")
+
 from pathlib import Path
 
 import joblib
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.inspection import permutation_importance
 from sklearn.model_selection import train_test_split
 
 
-# --------------------------------------------------
+# ==================================================
 # Paths
-# --------------------------------------------------
+# ==================================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,23 +29,25 @@ DATA_PATH = (
 )
 
 
-# --------------------------------------------------
-# Load model
-# --------------------------------------------------
+# ==================================================
+# Load trained model
+# ==================================================
 
+print("Loading model...")
 model = joblib.load(MODEL_PATH)
 
 
-# --------------------------------------------------
+# ==================================================
 # Load dataset
-# --------------------------------------------------
+# ==================================================
 
+print("Loading dataset...")
 df = pd.read_csv(DATA_PATH)
 
 
-# --------------------------------------------------
+# ==================================================
 # Feature engineering
-# --------------------------------------------------
+# ==================================================
 
 df["loan_to_income"] = (
     df["loan_amnt"]
@@ -50,9 +55,9 @@ df["loan_to_income"] = (
 )
 
 
-# --------------------------------------------------
-# Separate X and y
-# --------------------------------------------------
+# ==================================================
+# Separate features and target
+# ==================================================
 
 X = df.drop(
     columns=["loan_status"]
@@ -61,9 +66,9 @@ X = df.drop(
 y = df["loan_status"]
 
 
-# --------------------------------------------------
-# Train/test split
-# --------------------------------------------------
+# ==================================================
+# Train / test split
+# ==================================================
 
 X_train, X_test, y_train, y_test = train_test_split(
     X,
@@ -74,10 +79,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
-# --------------------------------------------------
+# ==================================================
 # Permutation importance
-# --------------------------------------------------
+# ==================================================
 
+print("Starting permutation importance...")
 result = permutation_importance(
     model,
     X_test,
@@ -88,9 +94,9 @@ result = permutation_importance(
 )
 
 
-# --------------------------------------------------
+# ==================================================
 # Create importance DataFrame
-# --------------------------------------------------
+# ==================================================
 
 importance_df = pd.DataFrame(
     {
@@ -101,23 +107,23 @@ importance_df = pd.DataFrame(
 )
 
 
-# --------------------------------------------------
-# Sort by importance
-# --------------------------------------------------
+# ==================================================
+# Sort features by importance
+# ==================================================
 
 importance_df = (
     importance_df
     .sort_values(
-        "importance_mean",
+        by="importance_mean",
         ascending=False,
     )
     .reset_index(drop=True)
 )
 
 
-# --------------------------------------------------
-# Display
-# --------------------------------------------------
+# ==================================================
+# Display results in terminal
+# ==================================================
 
 print("\nPermutation Feature Importance")
 print("-" * 50)
@@ -128,28 +134,51 @@ print(
     )
 )
 
-import matplotlib.pyplot as plt
 
+# ==================================================
+# Plot top 10 features
+# ==================================================
 
 top_features = importance_df.head(10)
 
-plt.figure(figsize=(10, 6))
+
+plt.figure(figsize=(12, 8))
 
 plt.barh(
     top_features["feature"],
     top_features["importance_mean"],
 )
 
-plt.xlabel("Mean decrease in ROC-AUC")
+plt.xlabel(
+    "Mean decrease in ROC-AUC"
+)
 
-plt.ylabel("Feature")
+plt.ylabel(
+    "Feature"
+)
 
 plt.title(
     "Top 10 Features - Permutation Importance"
 )
 
+# Highest importance at the top
 plt.gca().invert_yaxis()
 
 plt.tight_layout()
 
 plt.show()
+
+
+# ==================================================
+# Function for Streamlit
+# ==================================================
+
+def get_feature_importance():
+    """
+    Return permutation feature importance
+    as a DataFrame.
+    """
+
+    return importance_df
+
+print("Permutation importance completed")
