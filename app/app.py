@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 
 import streamlit as st
+import pandas as pd
 
 
 # --------------------------------------------------
@@ -9,6 +10,12 @@ import streamlit as st
 # --------------------------------------------------
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+FEATURE_IMPORTANCE_PATH = (
+    BASE_DIR
+    / "models"
+    / "feature_importance.csv"
+)
 
 sys.path.append(str(BASE_DIR))
 
@@ -18,7 +25,6 @@ sys.path.append(str(BASE_DIR))
 # --------------------------------------------------
 
 from src.predict import predict_loan
-from src.feature_importance import get_feature_importance
 
 
 # --------------------------------------------------
@@ -381,11 +387,11 @@ st.write(
 # --------------------------------------------------
 
 try:
-
-    importance_df = get_feature_importance()
+    importance_df = pd.read_csv(
+    FEATURE_IMPORTANCE_PATH
+)
 
     top_features = importance_df.head(10)
-
 
     # ----------------------------------------------
     # Chart
