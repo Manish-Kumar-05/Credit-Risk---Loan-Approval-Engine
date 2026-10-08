@@ -1,0 +1,14 @@
+Credit Risk Engine - Classification Report
+=======================================================
+
+Model: Tuned K-Nearest Neighbors
+Production threshold: 0.4
+
+              precision    recall  f1-score   support
+
+      Reject       0.94      0.94      0.94      7000
+     Approve       0.78      0.80      0.79      2000
+
+    accuracy                           0.90      9000
+   macro avg       0.86      0.87      0.86      9000
+weighted avg       0.91      0.90      0.91      9000

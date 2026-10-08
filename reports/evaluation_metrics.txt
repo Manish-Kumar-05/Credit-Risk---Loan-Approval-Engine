@@ -1,0 +1,21 @@
+Credit Risk Engine - Model Evaluation
+==================================================
+
+Model: Tuned K-Nearest Neighbors
+ROC-AUC: 0.958837
+
+Confusion Matrix
+----------------
+[[6760  240]
+ [ 595 1405]]
+
+Classification Report
+--------------------
+              precision    recall  f1-score   support
+
+      Reject       0.92      0.97      0.94      7000
+     Approve       0.85      0.70      0.77      2000
+
+    accuracy                           0.91      9000
+   macro avg       0.89      0.83      0.86      9000
+weighted avg       0.90      0.91      0.90      9000
